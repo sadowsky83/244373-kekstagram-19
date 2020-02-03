@@ -9,6 +9,7 @@ var names = ['Валентин', 'Джек Шепард', 'Азура', 'Каб�
 // переменные элементов карточки
 var cardsArray = [];
 var picture = document.querySelector('#picture').content.querySelector('.picture');
+var commentsListItem = document.querySelector('#commentsListItem').content.querySelector('.social__comment');
 var pictures = document.querySelector('.pictures');
 
 // выбор случайного числа в диапазоне
@@ -69,6 +70,15 @@ for (var i = 0; i < cardsArray.length; i++) {
   pictures.appendChild(fragment);
 }
 
+// отрисовка комментария
+function renderComment(comment) {
+  var commentItemElement = commentsListItem.cloneNode(true);
+  commentItemElement.querySelector('.social__picture').src = comment.avatar;
+  commentItemElement.querySelector('.social__picture').alt = comment.name;
+  commentItemElement.querySelector('.social__text').textContent = comment.message;
+  return commentItemElement;
+}
+
 function bigPictureShow(cardNumber) {
   var bigPictureImg = document.querySelector('.big-picture__img');
   var socialComents = document.querySelector('.social__comments');
@@ -81,15 +91,18 @@ function bigPictureShow(cardNumber) {
 
   // добавление списка комментариев
   for (var y = 0; y < cardsArray[cardNumber].comments.length; y++) {
-    var socialComment = '<li class="social__comment"><img class="social__picture" src="' + cardsArray[cardNumber].comments[y].avatar + '" alt="' + cardsArray[cardNumber].comments[y].name + '" width="35" height="35"><p class="social__text">' + cardsArray[cardNumber].comments[y].message + '</p></li>';
-    socialComents.innetHTML = socialComment;
+    fragment.appendChild(renderComment(cardsArray[cardNumber].comments[y]));
+    socialComents.appendChild(fragment);
   }
-
   document.querySelector('.social__caption').textContent = cardsArray[cardNumber].description;
-  document.querySelector('.social__comment-count', '.comments-loader').classList.add('hidden');
 }
+
+// скрытие блоков .social__comment-count и .comments-loader
+document.querySelector('.social__comment-count').classList.add('hidden');
+document.querySelector('.comments-loader').classList.add('hidden');
 
 bigPictureShow(0);
 
+// отключение прокрутки при скролле и открытом блоке big-picture
 document.querySelector('body').classList.add('modal-open');
 
