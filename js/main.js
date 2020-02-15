@@ -175,19 +175,16 @@ function changeScale(evt) {
   if (evt.target === scaleControlSmaller) {
     if (imagePreviewScale >= 50) {
       imagePreviewScale -= 25;
-    } else {
-      return imagePreviewScale;
     }
-  }
-  if (evt.target === scaleControlBigger) {
+  } else if (evt.target === scaleControlBigger) {
     if (imagePreviewScale <= 75) {
       imagePreviewScale += 25;
-    } else {
-      return imagePreviewScale;
     }
   }
+
   scaleControlValue.value = imagePreviewScale + '%';
   imgUploadPreview.style.transform = 'scale(' + imagePreviewScale * 0.01 + ')';
+  return imagePreviewScale;
 }
 
 imgUploadScale.addEventListener('click', changeScale);
