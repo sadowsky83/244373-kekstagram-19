@@ -45,23 +45,18 @@ function uploadOpen() {
   body.classList.add('modal-open');
   imgUploadOverlay.classList.remove('hidden');
 
-  document.addEventListener('keydown', onUploadEscPress);
+  uploadFileInput.addEventListener('keydown', onUploadEscPress);
 }
 
 function uploadClose() {
   body.classList.remove('modal-open');
   imgUploadOverlay.classList.add('hidden');
   imgUploadForm.reset();
-
   document.removeEventListener('keydown', onUploadEscPress);
 }
 
-function onInputFocus() {
-  document.removeEventListener('keydown', onUploadEscPress);
-}
-
-function onInputBlur() {
-  document.removeEventListener('keydown', onUploadEscPress);
+function onInputKeyDown(evt) {
+  evt.stopPropagation();
 }
 
 // выбор случайного числа в диапазоне
@@ -216,15 +211,18 @@ function changeEffect(evt) {
 imgUploadEffects.addEventListener('change', changeEffect);
 
 // валидация хэштэгов
-textHashtag.addEventListener('focus', onInputFocus);
-textHashtag.removeEventListener('blur', onInputBlur);
+textHashtag.addEventListener('keydown', onInputKeyDown);
 
 function validatorHashtag(hashtag) {
+  var regesp = /^[а-яёa-z0-9]+$/i;
   if (hashtag[0] !== '#') {
     textHashtag.setCustomValidity('Хэш-тег начинается с символа #');
     return false;
   } else if (hashtag.length < 2) {
     textHashtag.setCustomValidity('Хеш-тег не может состоять только из одной решётки');
+    return false;
+  } else if (!regesp.test(hashtag.substr(1))) {
+    textHashtag.setCustomValidity('Хэштэг должен состоять из букв и чисел');
     return false;
   } else if (hashtag.length > 20) {
     textHashtag.setCustomValidity('Максимальная длина одного хэш-тега 20 cимволов, включая решётку');
@@ -233,6 +231,7 @@ function validatorHashtag(hashtag) {
     textHashtag.setCustomValidity('Хэш-теги разделяются пробелами');
     return false;
   }
+  textHashtag.setCustomValidity('');
   return true;
 }
 
