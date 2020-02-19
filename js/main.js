@@ -256,4 +256,3 @@ function hashtagArrayCreate() {
 }
 
 textHashtag.addEventListener('input', hashtagArrayCreate);
-
