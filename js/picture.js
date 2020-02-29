@@ -4,7 +4,7 @@
 
   var picture = document.querySelector('#picture').content.querySelector('.picture');
 
-  // отрисовка карточки
+  // создание карточки
   function renderCard(card) {
     var cardElement = picture.cloneNode(true);
     cardElement.querySelector('.picture__img').src = card.url;
