@@ -3,7 +3,7 @@
 (function () {
 
   var commentsListItem = document.querySelector('#commentsListItem').content.querySelector('.social__comment');
-  var pictures = document.querySelector('.pictures');
+  var fragment = document.createDocumentFragment();
 
   // отрисовка комментария
   function renderComment(comment) {
@@ -31,20 +31,6 @@
     }
     document.querySelector('.social__caption').textContent = window.gallery.cardsArray[cardNumber].description;
   }
-
-
-  // создание фрагмента
-  var fragment = document.createDocumentFragment();
-
-  for (var i = 0; i < window.gallery.cardsArray.length; i++) {
-    fragment.appendChild(window.picture.renderCard(window.gallery.cardsArray[i]));
-    pictures.appendChild(fragment);
-  }
-
-
-  // скрытие блоков .social__comment-count и .comments-loader
-  document.querySelector('.social__comment-count').classList.add('hidden');
-  document.querySelector('.comments-loader').classList.add('hidden');
 
   bigPictureShow(0);
 

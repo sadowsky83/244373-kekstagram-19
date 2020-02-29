@@ -2,32 +2,29 @@
 
 (function () {
 
-  var cardsArray = [];
+  // отрисовка галлереи карточек с сервера
+  function onSuccess(data) {
+    var pictures = document.querySelector('.pictures');
+    var fragment = document.createDocumentFragment();
 
-  // выбор случайного числа в диапазоне
-  function getRandomInRange(min, max) {
-    var randomNumber = min + Math.random() * (max - min);
-    return Math.round(randomNumber);
-  }
-
-  // создание массива карточек
-  function cardArrayGeneration(quantity) {
-    for (var i = 1; i <= quantity; i++) {
-      var imgObj = {
-        url: 'photos/' + i + '.jpg',
-        description: 'Описание фотографии',
-        likes: getRandomInRange(15, 200),
-        comments: window.data.commentArrayGeneration(getRandomInRange(1, 10))
-      };
-      cardsArray.push(imgObj);
+    for (var i = 0; i < data.length; i++) {
+      fragment.appendChild(window.picture.renderCard(data[i]));
+      pictures.appendChild(fragment);
     }
-    return cardsArray;
+
   }
 
-  cardArrayGeneration(25);
+  // вывод сообщения об ошибке
+  function onError(errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: orange;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  }
 
-  window.gallery = {
-    cardsArray: cardsArray
-  };
-
+  window.backend.load(onSuccess, onError);
 })();
