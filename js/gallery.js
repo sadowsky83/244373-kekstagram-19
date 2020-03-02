@@ -1,17 +1,18 @@
 'use strict';
 
 (function () {
+  var cardsArray = [];
 
   // отрисовка галлереи карточек с сервера
   function onSuccess(data) {
+    cardsArray = data;
     var pictures = document.querySelector('.pictures');
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < data.length; i++) {
-      fragment.appendChild(window.picture.renderCard(data[i]));
+    for (var i = 0; i < cardsArray.length; i++) {
+      fragment.appendChild(window.picture.renderCard(cardsArray[i]));
       pictures.appendChild(fragment);
     }
-
   }
 
   // вывод сообщения об ошибке
@@ -27,4 +28,9 @@
   }
 
   window.backend.load(onSuccess, onError);
+
+  window.gallery = {
+    cardsArray: cardsArray
+  };
+
 })();
