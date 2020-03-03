@@ -2,8 +2,37 @@
 
 (function () {
 
+  var body = document.querySelector('body');
+  var bigPictureImg = document.querySelector('.big-picture__img');
+  var socialComents = document.querySelector('.social__comments');
+  var socialFooterText = document.querySelector('social__footer-text');
+  var bigPicture = document.querySelector('.big-picture');
+  var bigPictureCancel = document.querySelector('.big-picture__cancel');
+
   var commentsListItem = document.querySelector('#commentsListItem').content.querySelector('.social__comment');
   var fragment = document.createDocumentFragment();
+
+  // клавиши
+  var ESC_KEY = 'Escape';
+
+  function onPreviewEscPress(evt) {
+    if (evt.key === ESC_KEY) {
+      previewClose();
+    }
+  }
+
+  function previewOpen() {
+    body.classList.add('modal-open');
+    bigPicture.classList.remove('hidden');
+    socialFooterText.addEventListener('keydown', onPreviewEscPress);
+  }
+
+  function previewClose() {
+    body.classList.remove('modal-open');
+    bigPicture.classList.add('hidden');
+    socialFooterText.reset();
+    document.removeEventListener('keydown', onPreviewEscPress);
+  }
 
   // отрисовка комментария
   function renderComment(comment) {
@@ -14,24 +43,34 @@
     return commentItemElement;
   }
 
-  function bigPictureShow(cardNumber) {
-    var bigPictureImg = document.querySelector('.big-picture__img');
-    var socialComents = document.querySelector('.social__comments');
+  // отрисовка окна просмотра
+  function bigPictureShow(cardData) {
 
-    // показываем блок big-picture
-    // document.querySelector('.big-picture').classList.remove('hidden');
-    bigPictureImg.querySelector('img').src = window.gallery.cardsArray[cardNumber].url;
-    document.querySelector('.likes-count').textContent = window.gallery.cardsArray[cardNumber].likes;
-    document.querySelector('.comments-count').textContent = window.gallery.cardsArray[cardNumber].comments.length;
+    bigPictureImg.querySelector('img').src = cardData.url;
+    document.querySelector('.likes-count').textContent = cardData.likes;
+    document.querySelector('.comments-count').textContent = cardData.comments.length;
 
     // добавление списка комментариев
-    for (var y = 0; y < window.gallery.cardsArray[cardNumber].comments.length; y++) {
-      fragment.appendChild(renderComment(window.gallery.cardsArray[cardNumber].comments[y]));
+    for (var y = 0; y < cardData.comments.length; y++) {
+      fragment.appendChild(renderComment(cardData.comments[y]));
       socialComents.appendChild(fragment);
     }
-    document.querySelector('.social__caption').textContent = window.gallery.cardsArray[cardNumber].description;
+    document.querySelector('.social__caption').textContent = cardData.description;
   }
 
-  bigPictureShow(0);
+  bigPictureCancel.addEventListener('click', function () {
+    previewClose();
+  });
+
+  document.addEventListener('keydown', function (evt) {
+    if (evt.key === ESC_KEY) {
+      previewClose();
+    }
+  });
+
+  window.preview = {
+    bigPictureShow: bigPictureShow,
+    previewOpen: previewOpen
+  };
 
 })();
