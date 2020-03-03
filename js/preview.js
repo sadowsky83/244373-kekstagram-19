@@ -8,17 +8,12 @@
   var socialFooterText = document.querySelector('social__footer-text');
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureCancel = document.querySelector('.big-picture__cancel');
-  var pictures = document.querySelector('.pictures');
-  var pictureCard = pictures.querySelector('.picture');
-
-  console.log(pictureCard);
 
   var commentsListItem = document.querySelector('#commentsListItem').content.querySelector('.social__comment');
   var fragment = document.createDocumentFragment();
 
   // клавиши
   var ESC_KEY = 'Escape';
-  var ENTER_KEY = 'Enter';
 
   function onPreviewEscPress(evt) {
     if (evt.key === ESC_KEY) {
@@ -29,8 +24,6 @@
   function previewOpen() {
     body.classList.add('modal-open');
     bigPicture.classList.remove('hidden');
-    bigPictureShow(1);
-
     socialFooterText.addEventListener('keydown', onPreviewEscPress);
   }
 
@@ -51,32 +44,19 @@
   }
 
   // отрисовка окна просмотра
-  function bigPictureShow(cardNumber) {
+  function bigPictureShow(cardData) {
 
-    bigPictureImg.querySelector('img').src = window.gallery.cardsArray[cardNumber].url;
-    document.querySelector('.likes-count').textContent = window.gallery.cardsArray[cardNumber].likes;
-    document.querySelector('.comments-count').textContent = window.gallery.cardsArray[cardNumber].comments.length;
+    bigPictureImg.querySelector('img').src = cardData.url;
+    document.querySelector('.likes-count').textContent = cardData.likes;
+    document.querySelector('.comments-count').textContent = cardData.comments.length;
 
     // добавление списка комментариев
-    for (var y = 0; y < window.gallery.cardsArray[cardNumber].comments.length; y++) {
-      fragment.appendChild(renderComment(window.gallery.cardsArray[cardNumber].comments[y]));
+    for (var y = 0; y < cardData.comments.length; y++) {
+      fragment.appendChild(renderComment(cardData.comments[y]));
       socialComents.appendChild(fragment);
     }
-    document.querySelector('.social__caption').textContent = window.gallery.cardsArray[cardNumber].description;
+    document.querySelector('.social__caption').textContent = cardData.description;
   }
-
-  // открытие/закрытие окна просмотра
-  pictures.addEventListener('click', function () {
-    event.preventDefault();
-    previewOpen();
-  });
-
-  pictures.addEventListener('keydown', function (evt) {
-    event.preventDefault();
-    if (evt.key === ENTER_KEY) {
-      previewOpen();
-    }
-  });
 
   bigPictureCancel.addEventListener('click', function () {
     previewClose();
@@ -87,5 +67,10 @@
       previewClose();
     }
   });
+
+  window.preview = {
+    bigPictureShow: bigPictureShow,
+    previewOpen: previewOpen
+  };
 
 })();
