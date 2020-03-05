@@ -2,11 +2,11 @@
 
 (function () {
 
-  var imgUploadEffectLevel = document.querySelector('.img-upload__effect-level');
-  var effectLevelValue = document.querySelector('.effect-level__value');
-  var effectLevelLine = document.querySelector('.effect-level__line');
+  // var imgUploadEffectLevel = document.querySelector('.img-upload__effect-level');
+  // var effectLevelValue = document.querySelector('.effect-level__value');
+  // var effectLevelLine = document.querySelector('.effect-level__line');
   var effectLevelPin = document.querySelector('.effect-level__pin');
-  var effectLevelDepth = document.querySelector('.effect-level__depth');
+  // var effectLevelDepth = document.querySelector('.effect-level__depth');
 
   effectLevelPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
