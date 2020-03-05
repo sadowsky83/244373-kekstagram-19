@@ -104,5 +104,4 @@
   }
 
   imgUploadEffects.addEventListener('change', changeEffect);
-
 })();
