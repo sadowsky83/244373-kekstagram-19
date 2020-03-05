@@ -5,7 +5,7 @@
   var body = document.querySelector('body');
   var bigPictureImg = document.querySelector('.big-picture__img');
   var socialComents = document.querySelector('.social__comments');
-  var socialFooterText = document.querySelector('social__footer-text');
+  var socialFooterText = document.querySelector('.social__footer-text');
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureCancel = document.querySelector('.big-picture__cancel');
 
@@ -15,23 +15,19 @@
   // клавиши
   var ESC_KEY = 'Escape';
 
-  function onPreviewEscPress(evt) {
-    if (evt.key === ESC_KEY) {
-      previewClose();
-    }
-  }
-
   function previewOpen() {
     body.classList.add('modal-open');
     bigPicture.classList.remove('hidden');
-    socialFooterText.addEventListener('keydown', onPreviewEscPress);
   }
 
   function previewClose() {
     body.classList.remove('modal-open');
     bigPicture.classList.add('hidden');
-    socialFooterText.reset();
-    document.removeEventListener('keydown', onPreviewEscPress);
+    socialFooterText.value = '';
+  }
+
+  function onInputKeyDown(evt) {
+    evt.stopPropagation();
   }
 
   // отрисовка комментария
@@ -67,6 +63,8 @@
       previewClose();
     }
   });
+
+  socialFooterText.addEventListener('keydown', onInputKeyDown);
 
   window.preview = {
     bigPictureShow: bigPictureShow,
