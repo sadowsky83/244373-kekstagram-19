@@ -31,6 +31,7 @@
       }
 
       makeValueOfFilter(position);
+      window.form.applyCurrentEffect(position);
     }
 
     function onMouseUp(upEvt) {
@@ -43,5 +44,9 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+
+  window.slider = {
+    makeValueOfFilter: makeValueOfFilter
+  };
 
 })();

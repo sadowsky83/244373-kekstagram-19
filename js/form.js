@@ -20,10 +20,21 @@
   var imgUploadOverlay = document.querySelector('.img-upload__overlay');
   var imgUploadForm = document.querySelector('.img-upload__form');
   var imagePreviewScale = 100;
+  var initEffectLevel = 20;
+
+  var effectArray = {
+    NONE: 'none',
+    GRYSCALE: 'grayscale',
+    SEPIA: 'sepia',
+    INVERT: 'invert',
+    BLUR: 'blur',
+    BRIGHTNESS: 'brightness'
+  };
+
+  var currentEffect = effectArray.NONE;
 
   // клавиши
   var ESC_KEY = 'Escape';
-  // var ENTER_KEY = 'Enter';
 
   function onUploadEscPress(evt) {
     if (evt.key === ESC_KEY) {
@@ -80,28 +91,70 @@
   imgUploadScale.addEventListener('click', changeScale);
 
   // наложение эффектов
-  var effectLevel = 1; // времменное значение уровня эффекта, потом будет задаваться бегунком в img-upload__effect-level
-
   function changeEffect(evt) {
-    if (evt.target === effectNoneButton) {
+    applyEffect(convertor(evt.target), initEffectLevel);
+    window.slider.makeValueOfFilter(90);
+  }
+
+  function applyEffect(name, value) {
+    value = value / 450;
+    if (name === effectArray.NONE) {
       imgUploadPreview.style.filter = 'none';
     }
-    if (evt.target === effectChromeButton) {
-      imgUploadPreview.style.filter = 'grayscale(' + effectLevel * 1 + ')';
+    if (name === effectArray.GRYSCALE) {
+      imgUploadPreview.style.filter = 'grayscale(' + value * 1 + ')';
     }
-    if (evt.target === effectSepiaButton) {
-      imgUploadPreview.style.filter = 'sepia(' + effectLevel * 1 + ')';
+    if (name === effectArray.SEPIA) {
+      imgUploadPreview.style.filter = 'sepia(' + value * 1 + ')';
     }
-    if (evt.target === effectMarvinButton) {
-      imgUploadPreview.style.filter = 'invert(' + effectLevel * 100 + '%)';
+    if (name === effectArray.INVERT) {
+      imgUploadPreview.style.filter = 'invert(' + value * 100 + '%)';
     }
-    if (evt.target === effectPhobosButton) {
-      imgUploadPreview.style.filter = 'blur(' + effectLevel * 3 + 'px)';
+    if (name === effectArray.BLUR) {
+      imgUploadPreview.style.filter = 'blur(' + value * 3 + 'px)';
     }
-    if (evt.target === effectHeatButton) {
-      imgUploadPreview.style.filter = 'brightness(' + 1 + effectLevel * 2 + ')';
+    if (name === effectArray.BRIGHTNESS) {
+      imgUploadPreview.style.filter = 'brightness(' + (1 + value * 2) + ')';
     }
   }
 
+  function convertor(button) {
+    if (button === effectNoneButton) {
+      currentEffect = effectArray.NONE;
+      return effectArray.NONE;
+    }
+    if (button === effectChromeButton) {
+      currentEffect = effectArray.GRYSCALE;
+      return effectArray.GRYSCALE;
+    }
+    if (button === effectSepiaButton) {
+      currentEffect = effectArray.SEPIA;
+      return effectArray.SEPIA;
+    }
+    if (button === effectMarvinButton) {
+      currentEffect = effectArray.INVERT;
+      return effectArray.INVERT;
+    }
+    if (button === effectPhobosButton) {
+      currentEffect = effectArray.BLUR;
+      return effectArray.BLUR;
+    }
+    if (button === effectHeatButton) {
+      currentEffect = effectArray.BRIGHTNESS;
+      return effectArray.BRIGHTNESS;
+    }
+    currentEffect = effectArray.NONE;
+    return effectArray.NONE;
+  }
+
+  function applyCurrentEffect(value) {
+    applyEffect(currentEffect, value);
+  }
+
   imgUploadEffects.addEventListener('change', changeEffect);
+
+  window.form = {
+    applyCurrentEffect: applyCurrentEffect
+  };
+
 })();
