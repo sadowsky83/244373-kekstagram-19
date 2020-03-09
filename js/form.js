@@ -19,6 +19,14 @@
   var uploadFileInput = document.querySelector('#upload-file');
   var imgUploadOverlay = document.querySelector('.img-upload__overlay');
   var imgUploadForm = document.querySelector('.img-upload__form');
+  // var effectLevelValue = document.querySelector('.effect-level__value');
+  var uploadSelectImage = document.querySelector('#upload-select-image');
+  var main = document.querySelector('main');
+  var successBlock = document.querySelector('#success').content.querySelector('.success');
+  var successButton = document.querySelector('.success__button');
+  var successInner = document.querySelector('.success__inner');
+  var errorBlock = document.querySelector('#error').content.querySelector('.error');
+  // var errorButton = document.querySelector('.error__button');
   var imagePreviewScale = 100;
   var initEffectLevel = 20;
 
@@ -53,7 +61,12 @@
     body.classList.remove('modal-open');
     imgUploadOverlay.classList.add('hidden');
     imgUploadForm.reset();
+    imgUploadPreview.style.filter = 'none';
+    window.slider.makeValueOfFilter(90);
+    imgUploadPreview.style.transform = 'scale(1)';
     document.removeEventListener('keydown', onUploadEscPress);
+    imagePreviewScale = 100;
+    return imagePreviewScale;
   }
 
   // отrрытие/закрытие формы загрузки
@@ -68,6 +81,15 @@
   document.addEventListener('keydown', function (evt) {
     if (evt.key === ESC_KEY) {
       uploadClose();
+      removeFormMessage(successBlock);
+      removeFormMessage(errorBlock);
+    }
+  });
+
+  document.addEventListener('click', function (evt) {
+    if (evt.target !== successInner) {
+      removeFormMessage(successBlock);
+      removeFormMessage(errorBlock);
     }
   });
 
@@ -103,6 +125,8 @@
     }
     if (name === effectArray.GRYSCALE) {
       imgUploadPreview.style.filter = 'grayscale(' + value * 1 + ')';
+      // effectLevelValue.value = ;
+
     }
     if (name === effectArray.SEPIA) {
       imgUploadPreview.style.filter = 'sepia(' + value * 1 + ')';
@@ -152,6 +176,25 @@
   }
 
   imgUploadEffects.addEventListener('change', changeEffect);
+
+  function renderFormMessage(message) {
+    main.appendChild(message);
+  }
+
+  function removeFormMessage(message) {
+    message.remove();
+  }
+
+  uploadSelectImage.addEventListener('submit', function (evt) {
+    window.upload.upload(new FormData(uploadSelectImage), function () {
+      // отрисовка результата отправки формы
+    });
+    evt.preventDefault();
+    renderFormMessage(successBlock);
+    uploadClose();
+  });
+
+  successButton.addEventListener('click', removeFormMessage(successBlock));
 
   window.form = {
     applyCurrentEffect: applyCurrentEffect
