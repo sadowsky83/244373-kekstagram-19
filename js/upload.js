@@ -16,10 +16,16 @@
 
     xhr.addEventListener('load', function () {
       if (xhr.status === serverStatus.OK) {
-        onSuccess(xhr.response);
+        onSuccess();
       } else {
         onError();
       }
+    });
+    xhr.addEventListener('error', function () {
+      onError();
+    });
+    xhr.addEventListener('timeout', function () {
+      onError();
     });
 
     xhr.open('POST', serverUrls.POST);
