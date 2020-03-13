@@ -13,22 +13,28 @@
   var serverData = [];
   var serverDataForSort = [];
 
-  // отрисовка галлереи карточек с сервера
-  function renderCards(data) {
-    imgFilters.classList.remove('img-filters--inactive');
-    for (var i = 0; i < data.length; i++) {
-      serverData.push(data[i]);
-      serverDataForSort.push(data[i]);
-      var card = window.picture.renderCard(data[i]);
+  function renderCardsGallery(filtredArray, num) {
+    for (var i = 0; i < num; i++) {
+      var card = window.picture.renderCard(filtredArray[i]);
       (function (dataNumber) {
         card.addEventListener('click', function () {
-          window.preview.bigPictureShow(data[dataNumber]);
+          window.preview.bigPictureShow(filtredArray[dataNumber]);
           window.preview.previewOpen();
         });
       })(i);
       fragment.appendChild(card);
       pictures.appendChild(fragment);
     }
+  }
+
+  // отрисовка галлереи карточек с сервера
+  function renderCards(data) {
+    imgFilters.classList.remove('img-filters--inactive');
+    for (var i = 0; i < data.length; i++) {
+      serverData.push(data[i]);
+      serverDataForSort.push(data[i]);
+    }
+    renderCardsGallery(data, data.length);
     return [serverData, serverDataForSort];
   }
 
@@ -44,58 +50,38 @@
     document.body.insertAdjacentElement('afterbegin', node);
   }
 
-  // наложение-снятие эффекта активации на кнопках
+  // наложение-снятие эффекта активации на кнопках фильтрации
   imgFiltersForm.addEventListener('click', function (evt) {
     for (var i = 0; i < imgFiltersForm.children.length; i++) {
       imgFiltersForm.children[i].classList.remove('img-filters__button--active');
     }
-    evt.target.classList.add('img-filters__button--active');
+    if (evt.target !== imgFiltersForm) {
+      evt.target.classList.add('img-filters__button--active');
+    }
   });
-
-  // удаление элеменотов из DOM-а по классу
-  function removeElementsByClass(className) {
-    var elements = document.getElementsByClassName(className);
-    while (elements.length > 0) {
-      elements[0].parentNode.removeChild(elements[0]);
-    }
-  }
-
-  function renderFiltredCards(filtredArray, num) {
-    for (var i = 0; i < num; i++) {
-      var card = window.picture.renderCard(filtredArray[i]);
-      (function (dataNumber) {
-        card.addEventListener('click', function () {
-          window.preview.bigPictureShow(filtredArray[dataNumber]);
-          window.preview.previewOpen();
-        });
-      })(i);
-      fragment.appendChild(card);
-      pictures.appendChild(fragment);
-    }
-  }
 
   // отрисовка дефолтного массива карточек
   function renderDefaultCards() {
-    removeElementsByClass('picture');
-    renderFiltredCards(serverData, serverData.length);
+    window.utils.removeElementsByClass('picture');
+    renderCardsGallery(serverData, serverData.length);
   }
 
   // отрисовка случайных неповторяющихся карточек в заданном количестве
   function renderRandomCards() {
-    removeElementsByClass('picture');
+    window.utils.removeElementsByClass('picture');
     serverDataForSort.sort(function () {
       return 0.5 - Math.random();
     });
-    renderFiltredCards(serverDataForSort, numberOfRandomCards);
+    renderCardsGallery(serverDataForSort, numberOfRandomCards);
   }
 
   // отрисовка карточек с наибольшим количеством комментариев по убыванию
   function renderDiscussedCards() {
-    removeElementsByClass('picture');
+    window.utils.removeElementsByClass('picture');
     serverDataForSort.sort(function (a, b) {
       return b.comments.length - a.comments.length;
     });
-    renderFiltredCards(serverDataForSort, serverDataForSort.length);
+    renderCardsGallery(serverDataForSort, serverDataForSort.length);
   }
 
   filterDefault.addEventListener('click', renderDefaultCards);
@@ -108,5 +94,3 @@
   };
 
 })();
-
-
