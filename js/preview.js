@@ -15,15 +15,18 @@
   var commentsNumber = 5;
   var commentsCounter = 5;
   var commentsCount = 0;
+  var cardData = {};
 
   // клавиши
   var ESC_KEY = 'Escape';
 
+  // открытие окна просмотра
   function previewOpen() {
     body.classList.add('modal-open');
     bigPicture.classList.remove('hidden');
   }
 
+  // закрытие окна просмотра
   function previewClose() {
     body.classList.remove('modal-open');
     bigPicture.classList.add('hidden');
@@ -32,12 +35,9 @@
     socialCommentsLoader.removeEventListener('click', renderMoreComments);
     commentsNumber = 5;
     commentsCount = 0;
-    console.log('>нажат previewClose');
-    console.log('commentsNumber =' + commentsNumber);
-    console.log('commentsCount =' + commentsCount);
-    console.log('commentsCounter =' + commentsCounter);
   }
 
+  // блокировка закрытия окна по нажатию ESC при фокусе
   function onInputKeyDown(evt) {
     evt.stopPropagation();
   }
@@ -52,7 +52,8 @@
   }
 
   // отрисовка окна просмотра
-  function bigPictureShow(cardData) {
+  function bigPictureShow(data) {
+    cardData = data;
 
     bigPictureImg.querySelector('img').src = cardData.url;
     document.querySelector('.likes-count').textContent = cardData.likes;
@@ -60,15 +61,13 @@
 
     // добавление списка комментариев
     window.utils.removeElementsByClass('social__comment');
-    renderComments(cardData);
-    socialCommentsLoader.addEventListener('click', function () {
-      renderMoreComments(cardData);
-    });
+    renderComments();
+    socialCommentsLoader.addEventListener('click', renderMoreComments);
     document.querySelector('.social__caption').textContent = cardData.description;
   }
 
   // добавить комментарии
-  function renderComments(cardData) {
+  function renderComments() {
     window.utils.removeElementsByClass('social__comment');
     if (commentsNumber >= cardData.comments.length) {
       commentsCount = cardData.comments.length;
@@ -83,14 +82,10 @@
   }
 
   // добавить больше комментариев
-  function renderMoreComments(cardData) {
+  function renderMoreComments() {
     window.utils.removeElementsByClass('social__comment');
     commentsNumber = commentsNumber + commentsCounter;
-    renderComments(cardData);
-    console.log('>нажат renderMoreComments');
-    console.log('commentsNumber =' + commentsNumber);
-    console.log('commentsCount =' + commentsCount);
-    console.log('commentsCounter =' + commentsCounter);
+    renderComments();
   }
 
   bigPictureCancel.addEventListener('click', function () {

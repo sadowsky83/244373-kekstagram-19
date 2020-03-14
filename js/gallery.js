@@ -84,9 +84,9 @@
     renderCardsGallery(serverDataForSort, serverDataForSort.length);
   }
 
-  filterDefault.addEventListener('click', renderDefaultCards);
-  filterRandom.addEventListener('click', renderRandomCards);
-  filterDiscussed.addEventListener('click', renderDiscussedCards);
+  filterDefault.addEventListener('click', window.utils.debounce(renderDefaultCards));
+  filterRandom.addEventListener('click', window.utils.debounce(renderRandomCards));
+  filterDiscussed.addEventListener('click', window.utils.debounce(renderDiscussedCards));
 
   window.gallery = {
     renderCards: renderCards,
