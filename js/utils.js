@@ -1,8 +1,9 @@
 'use strict';
 (function () {
+
   var DEBOUNCE_INTERVAL = 500; // ms
 
-  // дребезг
+  // устранение дребезга
   function debounce(cb) {
     var lastTimeout = null;
     return function () {

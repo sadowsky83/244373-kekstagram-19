@@ -13,6 +13,7 @@
   var serverData = [];
   var serverDataForSort = [];
 
+  // отрисовка галлереи
   function renderCardsGallery(filtredArray, num) {
     for (var i = 0; i < num; i++) {
       var card = window.picture.renderCard(filtredArray[i]);

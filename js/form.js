@@ -24,11 +24,7 @@
   var uploadSelectImage = document.querySelector('#upload-select-image');
   var main = document.querySelector('main');
   var successBlock = document.querySelector('#success').content.querySelector('.success');
-  // var successButton = main.querySelector('.success__button');
-
   var errorBlock = document.querySelector('#error').content.querySelector('.error');
-  // var errorButton = document.querySelector('.error__button');
-  // var errorInner = document.querySelector('.error__inner');
   var imagePreviewScale = 100;
   var initEffectLevel = 450;
 
