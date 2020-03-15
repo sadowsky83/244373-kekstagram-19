@@ -54,4 +54,5 @@
   }
 
   textHashtag.addEventListener('input', hashtagArrayCreate);
+
 })();
