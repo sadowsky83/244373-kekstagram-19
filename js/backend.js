@@ -10,13 +10,13 @@
     OK: 200
   };
 
-  var timeOutInMs = 10000;
+  var TIME_OUT_IN_MS = 10000;
 
   function load(onSuccess, onError) {
 
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
-    xhr.timeout = timeOutInMs;
+    xhr.timeout = TIME_OUT_IN_MS;
 
     xhr.addEventListener('load', function () {
       if (xhr.status === serverStatus.OK) {

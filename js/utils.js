@@ -25,9 +25,15 @@
     }
   }
 
+  // запрет всплытия события
+  function onElementKeyDown(evt) {
+    evt.stopPropagation();
+  }
+
   window.utils = {
     debounce: debounce,
-    removeElementsByClass: removeElementsByClass
+    removeElementsByClass: removeElementsByClass,
+    onElementKeyDown: onElementKeyDown
   };
 
 })();

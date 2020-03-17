@@ -25,10 +25,12 @@
   var main = document.querySelector('main');
   var successBlock = document.querySelector('#success').content.querySelector('.success');
   var errorBlock = document.querySelector('#error').content.querySelector('.error');
-  var imagePreviewScale = 100;
-  var initEffectLevel = 450;
+  var textHashtag = document.querySelector('.text__hashtags');
+  var textDescription = document.querySelector('.text__description');
 
-  var effectArray = {
+  var imagePreviewScale = 100; // масштаб изображения при открытии окна
+
+  var EffectsArray = {
     NONE: 'none',
     GRYSCALE: 'grayscale',
     SEPIA: 'sepia',
@@ -37,7 +39,7 @@
     BRIGHTNESS: 'brightness'
   };
 
-  var currentEffect = effectArray.NONE;
+  var currentEffect = EffectsArray.NONE;
 
   // клавиши
   var ESC_KEY = 'Escape';
@@ -51,7 +53,7 @@
   function uploadOpen() {
     body.classList.add('modal-open');
     imgUploadOverlay.classList.remove('hidden');
-
+    textHashtag.style.borderColor = 'initial';
     uploadFileInput.addEventListener('keydown', onUploadEscPress);
   }
 
@@ -60,11 +62,10 @@
     imgUploadOverlay.classList.add('hidden');
     imgUploadForm.reset();
     imgUploadPreview.style.filter = 'none';
-    window.slider.makeValueOfFilter(450);
+    window.slider.makeValueOfFilter(window.slider.maxValue);
     imgUploadPreview.style.transform = 'scale(1)';
     document.removeEventListener('keydown', onUploadEscPress);
     imagePreviewScale = 100;
-    return imagePreviewScale;
   }
 
   // отrрытие/закрытие формы загрузки
@@ -103,71 +104,72 @@
 
   // наложение эффектов
   function changeEffect(evt) {
-    applyEffect(convertor(evt.target), initEffectLevel);
-    window.slider.makeValueOfFilter(450);
+    applyEffect(convertor(evt.target), window.slider.maxValue);
+    window.slider.makeValueOfFilter(window.slider.maxValue);
   }
 
   function applyEffect(name, value) {
-    value = value / 450;
-    if (name === effectArray.NONE) {
+    var valueForEffect = value / window.slider.maxValue;
+    var valueForInput = (value / window.slider.maxValue * 100).toFixed(0);
+    if (name === EffectsArray.NONE) {
       imgUploadPreview.style.filter = 'none';
       imgUploadEffectLevel.classList.add('hidden');
-      effectLevelValue.value = '100';
+      effectLevelValue.value = 100;
     }
-    if (name === effectArray.GRYSCALE) {
-      imgUploadPreview.style.filter = 'grayscale(' + value + ')';
+    if (name === EffectsArray.GRYSCALE) {
+      imgUploadPreview.style.filter = 'grayscale(' + valueForEffect + ')';
       imgUploadEffectLevel.classList.remove('hidden');
-      effectLevelValue.value = value;
+      effectLevelValue.value = valueForInput;
     }
-    if (name === effectArray.SEPIA) {
-      imgUploadPreview.style.filter = 'sepia(' + value + ')';
+    if (name === EffectsArray.SEPIA) {
+      imgUploadPreview.style.filter = 'sepia(' + valueForEffect + ')';
       imgUploadEffectLevel.classList.remove('hidden');
-      effectLevelValue.value = value;
+      effectLevelValue.value = valueForInput;
     }
-    if (name === effectArray.INVERT) {
-      imgUploadPreview.style.filter = 'invert(' + value * 100 + '%)';
+    if (name === EffectsArray.INVERT) {
+      imgUploadPreview.style.filter = 'invert(' + valueForEffect * 100 + '%)';
       imgUploadEffectLevel.classList.remove('hidden');
-      effectLevelValue.value = value * 100;
+      effectLevelValue.value = valueForInput;
     }
-    if (name === effectArray.BLUR) {
-      imgUploadPreview.style.filter = 'blur(' + value * 3 + 'px)';
+    if (name === EffectsArray.BLUR) {
+      imgUploadPreview.style.filter = 'blur(' + valueForEffect * 3 + 'px)';
       imgUploadEffectLevel.classList.remove('hidden');
-      effectLevelValue.value = value * 3;
+      effectLevelValue.value = valueForInput;
     }
-    if (name === effectArray.BRIGHTNESS) {
-      imgUploadPreview.style.filter = 'brightness(' + (1 + value * 2) + ')';
+    if (name === EffectsArray.BRIGHTNESS) {
+      imgUploadPreview.style.filter = 'brightness(' + (1 + valueForEffect * 2) + ')';
       imgUploadEffectLevel.classList.remove('hidden');
-      effectLevelValue.value = (1 + value * 2);
+      effectLevelValue.value = valueForInput;
     }
   }
 
   function convertor(button) {
     if (button === effectNoneButton) {
-      currentEffect = effectArray.NONE;
-      return effectArray.NONE;
+      currentEffect = EffectsArray.NONE;
+      return EffectsArray.NONE;
     }
     if (button === effectChromeButton) {
-      currentEffect = effectArray.GRYSCALE;
-      return effectArray.GRYSCALE;
+      currentEffect = EffectsArray.GRYSCALE;
+      return EffectsArray.GRYSCALE;
     }
     if (button === effectSepiaButton) {
-      currentEffect = effectArray.SEPIA;
-      return effectArray.SEPIA;
+      currentEffect = EffectsArray.SEPIA;
+      return EffectsArray.SEPIA;
     }
     if (button === effectMarvinButton) {
-      currentEffect = effectArray.INVERT;
-      return effectArray.INVERT;
+      currentEffect = EffectsArray.INVERT;
+      return EffectsArray.INVERT;
     }
     if (button === effectPhobosButton) {
-      currentEffect = effectArray.BLUR;
-      return effectArray.BLUR;
+      currentEffect = EffectsArray.BLUR;
+      return EffectsArray.BLUR;
     }
     if (button === effectHeatButton) {
-      currentEffect = effectArray.BRIGHTNESS;
-      return effectArray.BRIGHTNESS;
+      currentEffect = EffectsArray.BRIGHTNESS;
+      return EffectsArray.BRIGHTNESS;
     }
-    currentEffect = effectArray.NONE;
-    return effectArray.NONE;
+    currentEffect = EffectsArray.NONE;
+    return EffectsArray.NONE;
   }
 
   function applyCurrentEffect(value) {
@@ -201,6 +203,7 @@
     document.addEventListener('click', removeSuccessTemp);
     document.addEventListener('keydown', onSuccessKeydown);
     successInner.addEventListener('click', onInnerClick);
+    body.classList.add('modal-open');
   }
 
   function renderErrorTemp() {
@@ -211,6 +214,7 @@
     document.addEventListener('click', removeErrorTemp);
     document.addEventListener('keydown', onErrorKeydown);
     errorInner.addEventListener('click', onInnerClick);
+    body.classList.add('modal-open');
   }
 
   function removeSuccessTemp() {
@@ -221,6 +225,7 @@
     document.removeEventListener('click', removeSuccessTemp);
     document.removeEventListener('keydown', onSuccessKeydown);
     successInner.removeEventListener('click', onInnerClick);
+    body.classList.remove('modal-open');
   }
 
   function removeErrorTemp() {
@@ -231,6 +236,7 @@
     document.removeEventListener('click', removeErrorTemp);
     document.removeEventListener('keydown', onErrorKeydown);
     errorInner.removeEventListener('click', onInnerClick);
+    body.classList.remove('modal-open');
   }
 
   uploadSelectImage.addEventListener('submit', function (evt) {
@@ -238,6 +244,8 @@
     evt.preventDefault();
     uploadClose();
   });
+
+  textDescription.addEventListener('keydown', window.utils.onElementKeyDown);
 
   window.form = {
     applyCurrentEffect: applyCurrentEffect

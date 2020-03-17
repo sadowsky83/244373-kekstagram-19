@@ -12,9 +12,12 @@
   var socialCommentsLoader = document.querySelector('.social__comments-loader');
   var renderedCommentsCount = document.querySelector('.rendered-comments-count');
   var fragment = document.createDocumentFragment();
-  var commentsNumber = 5;
-  var commentsCounter = 5;
-  var commentsCount = 0;
+
+  var commentsNumber = 5; // количество показываемых по умолчанию комментариев
+  var commentsCount = 0; // количество показываемых комментариев
+
+  var COMMENTS_COUNTER = 5; // шаг увеличения количества комментариев
+
   var cardData = {};
 
   // клавиши
@@ -35,11 +38,6 @@
     socialCommentsLoader.removeEventListener('click', renderMoreComments);
     commentsNumber = 5;
     commentsCount = 0;
-  }
-
-  // блокировка закрытия окна по нажатию ESC при фокусе
-  function onInputKeyDown(evt) {
-    evt.stopPropagation();
   }
 
   // отрисовка комментария
@@ -63,6 +61,7 @@
     window.utils.removeElementsByClass('social__comment');
     renderComments();
     socialCommentsLoader.addEventListener('click', renderMoreComments);
+    socialCommentsLoader.classList.remove('hidden');
     document.querySelector('.social__caption').textContent = cardData.description;
   }
 
@@ -71,11 +70,12 @@
     window.utils.removeElementsByClass('social__comment');
     if (commentsNumber >= cardData.comments.length) {
       commentsCount = cardData.comments.length;
+      socialCommentsLoader.classList.add('hidden');
     } else {
       commentsCount = commentsNumber;
     }
-    for (var y = 0; y < commentsCount; y++) {
-      fragment.appendChild(renderComment(cardData.comments[y]));
+    for (var i = 0; i < commentsCount; i++) {
+      fragment.appendChild(renderComment(cardData.comments[i]));
       socialComents.appendChild(fragment);
     }
     renderedCommentsCount.textContent = commentsCount;
@@ -84,7 +84,7 @@
   // добавить больше комментариев
   function renderMoreComments() {
     window.utils.removeElementsByClass('social__comment');
-    commentsNumber = commentsNumber + commentsCounter;
+    commentsNumber = commentsNumber + COMMENTS_COUNTER;
     renderComments();
   }
 
@@ -98,7 +98,7 @@
     }
   });
 
-  socialFooterText.addEventListener('keydown', onInputKeyDown);
+  socialFooterText.addEventListener('keydown', window.utils.onElementKeyDown);
 
   window.preview = {
     bigPictureShow: bigPictureShow,
