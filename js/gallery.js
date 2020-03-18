@@ -2,6 +2,8 @@
 
 (function () {
 
+  var NUMBER_OF_RANDOM_CARDS = 10; // количество карточек фильтруемых случайно
+
   var imgFilters = document.querySelector('.img-filters');
   var imgFiltersForm = document.querySelector('.img-filters__form');
   var filterDefault = document.querySelector('#filter-default');
@@ -9,7 +11,7 @@
   var filterDiscussed = document.querySelector('#filter-discussed');
   var pictures = document.querySelector('.pictures');
   var fragment = document.createDocumentFragment();
-  var numberOfRandomCards = 10;
+
   var serverData = [];
   var serverDataForSort = [];
 
@@ -73,7 +75,7 @@
     serverDataForSort.sort(function () {
       return 0.5 - Math.random();
     });
-    renderCardsGallery(serverDataForSort, numberOfRandomCards);
+    renderCardsGallery(serverDataForSort, NUMBER_OF_RANDOM_CARDS);
   }
 
   // отрисовка карточек с наибольшим количеством комментариев по убыванию

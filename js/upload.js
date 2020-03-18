@@ -2,11 +2,11 @@
 
 (function () {
 
-  var serverUrls = {
+  var ServerUrls = {
     POST: 'https://js.dump.academy/kekstagram'
   };
 
-  var serverStatus = {
+  var ServerStatus = {
     OK: 200
   };
 
@@ -15,7 +15,7 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === serverStatus.OK) {
+      if (xhr.status === ServerStatus.OK) {
         onSuccess();
       } else {
         onError();
@@ -28,7 +28,7 @@
       onError();
     });
 
-    xhr.open('POST', serverUrls.POST);
+    xhr.open('POST', ServerUrls.POST);
     xhr.send(data);
   }
 

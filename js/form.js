@@ -25,10 +25,16 @@
   var main = document.querySelector('main');
   var successBlock = document.querySelector('#success').content.querySelector('.success');
   var errorBlock = document.querySelector('#error').content.querySelector('.error');
-  var imagePreviewScale = 100;
-  var initEffectLevel = 450;
+  var textHashtag = document.querySelector('.text__hashtags');
+  var textDescription = document.querySelector('.text__description');
 
-  var effectArray = {
+  var IMAGE_DEFAULT_SCALE = 100; // масштаб изображения по умолчанию
+  var IMAGE_SCALE_MAX = 100; // максимальный масштаб изображения
+  var IMAGE_SCALE_MIN = 25; // минимальный масштаб изображения
+  var IMAGE_SCALE_STEP = 25; // шаг увеличения/уменьшения масштаба
+  var EFFECT_DEFAULT_VALUE = 100; // глубина эффекта п умолчанию
+
+  var Effects = {
     NONE: 'none',
     GRYSCALE: 'grayscale',
     SEPIA: 'sepia',
@@ -37,7 +43,8 @@
     BRIGHTNESS: 'brightness'
   };
 
-  var currentEffect = effectArray.NONE;
+  var currentEffect = Effects.NONE;
+  var imagePreviewScale = IMAGE_DEFAULT_SCALE;
 
   // клавиши
   var ESC_KEY = 'Escape';
@@ -51,7 +58,9 @@
   function uploadOpen() {
     body.classList.add('modal-open');
     imgUploadOverlay.classList.remove('hidden');
-
+    scaleControlValue.value = imagePreviewScale + '%';
+    imgUploadPreview.style.transform = 'scale(' + imagePreviewScale * 0.01 + ')';
+    textHashtag.style.borderColor = 'initial';
     uploadFileInput.addEventListener('keydown', onUploadEscPress);
   }
 
@@ -60,11 +69,10 @@
     imgUploadOverlay.classList.add('hidden');
     imgUploadForm.reset();
     imgUploadPreview.style.filter = 'none';
-    window.slider.makeValueOfFilter(450);
+    window.slider.makeValueOfFilter(window.slider.maxValue);
     imgUploadPreview.style.transform = 'scale(1)';
     document.removeEventListener('keydown', onUploadEscPress);
-    imagePreviewScale = 100;
-    return imagePreviewScale;
+    imagePreviewScale = IMAGE_DEFAULT_SCALE;
   }
 
   // отrрытие/закрытие формы загрузки
@@ -85,12 +93,12 @@
   // масштабирование изображения
   function changeScale(evt) {
     if (evt.target === scaleControlSmaller) {
-      if (imagePreviewScale >= 50) {
-        imagePreviewScale -= 25;
+      if (imagePreviewScale >= (IMAGE_SCALE_MIN + IMAGE_SCALE_STEP)) {
+        imagePreviewScale -= IMAGE_SCALE_STEP;
       }
     } else if (evt.target === scaleControlBigger) {
-      if (imagePreviewScale <= 75) {
-        imagePreviewScale += 25;
+      if (imagePreviewScale <= (IMAGE_SCALE_MAX - IMAGE_SCALE_STEP)) {
+        imagePreviewScale += IMAGE_SCALE_STEP;
       }
     }
 
@@ -103,71 +111,72 @@
 
   // наложение эффектов
   function changeEffect(evt) {
-    applyEffect(convertor(evt.target), initEffectLevel);
-    window.slider.makeValueOfFilter(450);
+    applyEffect(convertor(evt.target), window.slider.maxValue);
+    window.slider.makeValueOfFilter(window.slider.maxValue);
   }
 
   function applyEffect(name, value) {
-    value = value / 450;
-    if (name === effectArray.NONE) {
+    var valueForEffect = value / window.slider.maxValue;
+    var valueForInput = (value / window.slider.maxValue * 100).toFixed(0);
+    if (name === Effects.NONE) {
       imgUploadPreview.style.filter = 'none';
       imgUploadEffectLevel.classList.add('hidden');
-      effectLevelValue.value = '100';
+      effectLevelValue.value = EFFECT_DEFAULT_VALUE;
     }
-    if (name === effectArray.GRYSCALE) {
-      imgUploadPreview.style.filter = 'grayscale(' + value + ')';
+    if (name === Effects.GRYSCALE) {
+      imgUploadPreview.style.filter = 'grayscale(' + valueForEffect + ')';
       imgUploadEffectLevel.classList.remove('hidden');
-      effectLevelValue.value = value;
+      effectLevelValue.value = valueForInput;
     }
-    if (name === effectArray.SEPIA) {
-      imgUploadPreview.style.filter = 'sepia(' + value + ')';
+    if (name === Effects.SEPIA) {
+      imgUploadPreview.style.filter = 'sepia(' + valueForEffect + ')';
       imgUploadEffectLevel.classList.remove('hidden');
-      effectLevelValue.value = value;
+      effectLevelValue.value = valueForInput;
     }
-    if (name === effectArray.INVERT) {
-      imgUploadPreview.style.filter = 'invert(' + value * 100 + '%)';
+    if (name === Effects.INVERT) {
+      imgUploadPreview.style.filter = 'invert(' + valueForEffect * 100 + '%)';
       imgUploadEffectLevel.classList.remove('hidden');
-      effectLevelValue.value = value * 100;
+      effectLevelValue.value = valueForInput;
     }
-    if (name === effectArray.BLUR) {
-      imgUploadPreview.style.filter = 'blur(' + value * 3 + 'px)';
+    if (name === Effects.BLUR) {
+      imgUploadPreview.style.filter = 'blur(' + valueForEffect * 3 + 'px)';
       imgUploadEffectLevel.classList.remove('hidden');
-      effectLevelValue.value = value * 3;
+      effectLevelValue.value = valueForInput;
     }
-    if (name === effectArray.BRIGHTNESS) {
-      imgUploadPreview.style.filter = 'brightness(' + (1 + value * 2) + ')';
+    if (name === Effects.BRIGHTNESS) {
+      imgUploadPreview.style.filter = 'brightness(' + (1 + valueForEffect * 2) + ')';
       imgUploadEffectLevel.classList.remove('hidden');
-      effectLevelValue.value = (1 + value * 2);
+      effectLevelValue.value = valueForInput;
     }
   }
 
   function convertor(button) {
     if (button === effectNoneButton) {
-      currentEffect = effectArray.NONE;
-      return effectArray.NONE;
+      currentEffect = Effects.NONE;
+      return Effects.NONE;
     }
     if (button === effectChromeButton) {
-      currentEffect = effectArray.GRYSCALE;
-      return effectArray.GRYSCALE;
+      currentEffect = Effects.GRYSCALE;
+      return Effects.GRYSCALE;
     }
     if (button === effectSepiaButton) {
-      currentEffect = effectArray.SEPIA;
-      return effectArray.SEPIA;
+      currentEffect = Effects.SEPIA;
+      return Effects.SEPIA;
     }
     if (button === effectMarvinButton) {
-      currentEffect = effectArray.INVERT;
-      return effectArray.INVERT;
+      currentEffect = Effects.INVERT;
+      return Effects.INVERT;
     }
     if (button === effectPhobosButton) {
-      currentEffect = effectArray.BLUR;
-      return effectArray.BLUR;
+      currentEffect = Effects.BLUR;
+      return Effects.BLUR;
     }
     if (button === effectHeatButton) {
-      currentEffect = effectArray.BRIGHTNESS;
-      return effectArray.BRIGHTNESS;
+      currentEffect = Effects.BRIGHTNESS;
+      return Effects.BRIGHTNESS;
     }
-    currentEffect = effectArray.NONE;
-    return effectArray.NONE;
+    currentEffect = Effects.NONE;
+    return Effects.NONE;
   }
 
   function applyCurrentEffect(value) {
@@ -201,6 +210,7 @@
     document.addEventListener('click', removeSuccessTemp);
     document.addEventListener('keydown', onSuccessKeydown);
     successInner.addEventListener('click', onInnerClick);
+    body.classList.add('modal-open');
   }
 
   function renderErrorTemp() {
@@ -211,6 +221,7 @@
     document.addEventListener('click', removeErrorTemp);
     document.addEventListener('keydown', onErrorKeydown);
     errorInner.addEventListener('click', onInnerClick);
+    body.classList.add('modal-open');
   }
 
   function removeSuccessTemp() {
@@ -221,6 +232,7 @@
     document.removeEventListener('click', removeSuccessTemp);
     document.removeEventListener('keydown', onSuccessKeydown);
     successInner.removeEventListener('click', onInnerClick);
+    body.classList.remove('modal-open');
   }
 
   function removeErrorTemp() {
@@ -231,6 +243,7 @@
     document.removeEventListener('click', removeErrorTemp);
     document.removeEventListener('keydown', onErrorKeydown);
     errorInner.removeEventListener('click', onInnerClick);
+    body.classList.remove('modal-open');
   }
 
   uploadSelectImage.addEventListener('submit', function (evt) {
@@ -238,6 +251,8 @@
     evt.preventDefault();
     uploadClose();
   });
+
+  textDescription.addEventListener('keydown', window.utils.onElementKeyDown);
 
   window.form = {
     applyCurrentEffect: applyCurrentEffect

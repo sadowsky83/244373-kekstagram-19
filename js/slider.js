@@ -2,6 +2,9 @@
 
 (function () {
 
+  var COORDINAT_MIN_VALUE = 0;
+  var COORDINAT_MAX_VALUE = 450;
+
   var effectLevelPin = document.querySelector('.effect-level__pin');
   var effectLevelDepth = document.querySelector('.effect-level__depth');
 
@@ -22,12 +25,12 @@
       var position = effectLevelPin.offsetLeft - shift;
       startCoords = moveEvt.clientX;
 
-      if (position <= 0) {
-        position = 0;
+      if (position <= COORDINAT_MIN_VALUE) {
+        position = COORDINAT_MIN_VALUE;
       }
 
-      if (position > 450) {
-        position = 450;
+      if (position > COORDINAT_MAX_VALUE) {
+        position = COORDINAT_MAX_VALUE;
       }
 
       makeValueOfFilter(position);
@@ -46,7 +49,8 @@
   });
 
   window.slider = {
-    makeValueOfFilter: makeValueOfFilter
+    makeValueOfFilter: makeValueOfFilter,
+    maxValue: COORDINAT_MAX_VALUE
   };
 
 })();
