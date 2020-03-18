@@ -4,7 +4,7 @@
 
   var textHashtag = document.querySelector('.text__hashtags');
   var uploadSubmit = document.querySelector('#upload-submit');
-  var hashtagsArray = [];
+  var hashtags = [];
 
   var HestagData = {
     MAX_COUNT: 5,
@@ -31,10 +31,10 @@
 
   function validatorHashtag(hashtag) {
     var regesp = /^[а-яёa-z0-9]+$/i;
-    if (hashtagsArray[0] === '') {
+    if (hashtags[0] === '') {
       textHashtag.setCustomValidity(CustomMessage.HESHTAGS_LIST_START);
       return false;
-    } else if (hashtagsArray[hashtagsArray.length - 1] === '') {
+    } else if (hashtags[hashtags.length - 1] === '') {
       textHashtag.setCustomValidity(CustomMessage.HESHTAGS_LIST_END);
       return false;
     } else if (hashtag.indexOf('#', HestagData.VALID_POSITION) > 0 || hashtag.length === 0) {
@@ -52,7 +52,7 @@
     } else if (hashtag.length > HestagData.MAX_LENGTH) {
       textHashtag.setCustomValidity(CustomMessage.HESHTAG_MAX_LENGTH + HestagData.MAX_LENGTH + CustomMessage.HESHTAG_VALUE_INCLUSIVE);
       return false;
-    } else if (hashtagsArray.length > HestagData.MAX_COUNT) {
+    } else if (hashtags.length > HestagData.MAX_COUNT) {
       textHashtag.setCustomValidity(CustomMessage.HESHTAG_MAX_NUMBER + HestagData.MAX_COUNT);
     }
     return true;
@@ -60,15 +60,15 @@
 
   function hashtagsArrayCreate() {
     if (textHashtag.value !== '') {
-      hashtagsArray = textHashtag.value.toLowerCase().split(' ');
-      for (var i = 0; i < hashtagsArray.length; i++) {
-        var isHashtagValid = validatorHashtag(hashtagsArray[i]);
+      hashtags = textHashtag.value.toLowerCase().split(' ');
+      for (var i = 0; i < hashtags.length; i++) {
+        var isHashtagValid = validatorHashtag(hashtags[i]);
         if (!isHashtagValid) {
           textHashtag.style.borderColor = 'red';
           break;
         }
         var positionNextHashtag = i + 1;
-        if (hashtagsArray.indexOf(hashtagsArray[i], positionNextHashtag) > 0) {
+        if (hashtags.indexOf(hashtags[i], positionNextHashtag) > 0) {
           textHashtag.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды');
           break;
         }

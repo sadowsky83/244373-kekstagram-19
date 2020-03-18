@@ -2,11 +2,11 @@
 
 (function () {
 
-  var serverUrls = {
+  var ServerUrls = {
     GET: 'https://js.dump.academy/kekstagram/data'
   };
 
-  var serverStatus = {
+  var ServerStatus = {
     OK: 200
   };
 
@@ -19,7 +19,7 @@
     xhr.timeout = TIME_OUT_IN_MS;
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === serverStatus.OK) {
+      if (xhr.status === ServerStatus.OK) {
         onSuccess(xhr.response);
       } else {
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
@@ -32,7 +32,7 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.open('GET', serverUrls.GET);
+    xhr.open('GET', ServerUrls.GET);
     xhr.send();
   }
 

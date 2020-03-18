@@ -2,6 +2,8 @@
 
 (function () {
 
+  var NUMBER_OF_RANDOM_CARDS = 10; // количество карточек фильтруемых случайно
+
   var imgFilters = document.querySelector('.img-filters');
   var imgFiltersForm = document.querySelector('.img-filters__form');
   var filterDefault = document.querySelector('#filter-default');
@@ -9,8 +11,6 @@
   var filterDiscussed = document.querySelector('#filter-discussed');
   var pictures = document.querySelector('.pictures');
   var fragment = document.createDocumentFragment();
-
-  var NUMBER_OF_RANDOM_CARDS = 10; // количество карточек фильтруемых случайно
 
   var serverData = [];
   var serverDataForSort = [];

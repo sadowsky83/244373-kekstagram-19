@@ -13,15 +13,15 @@
   var renderedCommentsCount = document.querySelector('.rendered-comments-count');
   var fragment = document.createDocumentFragment();
 
-  var commentsNumber = 5; // количество показываемых по умолчанию комментариев
-  var commentsCount = 0; // количество показываемых комментариев
-
   var COMMENTS_COUNTER = 5; // шаг увеличения количества комментариев
-
-  var cardData = {};
+  var COMMENTS_DEFAULT_NUMBER = 5; // количество показываемых по умолчанию комментариев
 
   // клавиши
   var ESC_KEY = 'Escape';
+
+  var commentsNumber = COMMENTS_DEFAULT_NUMBER;
+  var commentsCount = 0;
+  var cardData = {};
 
   // открытие окна просмотра
   function previewOpen() {
@@ -36,7 +36,7 @@
     socialFooterText.value = '';
     window.utils.removeElementsByClass('social__comment');
     socialCommentsLoader.removeEventListener('click', renderMoreComments);
-    commentsNumber = 5;
+    commentsNumber = COMMENTS_DEFAULT_NUMBER;
     commentsCount = 0;
   }
 

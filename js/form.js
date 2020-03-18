@@ -28,9 +28,13 @@
   var textHashtag = document.querySelector('.text__hashtags');
   var textDescription = document.querySelector('.text__description');
 
-  var imagePreviewScale = 100; // масштаб изображения при открытии окна
+  var IMAGE_DEFAULT_SCALE = 100; // масштаб изображения по умолчанию
+  var IMAGE_SCALE_MAX = 100; // максимальный масштаб изображения
+  var IMAGE_SCALE_MIN = 25; // минимальный масштаб изображения
+  var IMAGE_SCALE_STEP = 25; // шаг увеличения/уменьшения масштаба
+  var EFFECT_DEFAULT_VALUE = 100; // глубина эффекта п умолчанию
 
-  var EffectsArray = {
+  var Effects = {
     NONE: 'none',
     GRYSCALE: 'grayscale',
     SEPIA: 'sepia',
@@ -39,7 +43,8 @@
     BRIGHTNESS: 'brightness'
   };
 
-  var currentEffect = EffectsArray.NONE;
+  var currentEffect = Effects.NONE;
+  var imagePreviewScale = IMAGE_DEFAULT_SCALE;
 
   // клавиши
   var ESC_KEY = 'Escape';
@@ -53,6 +58,8 @@
   function uploadOpen() {
     body.classList.add('modal-open');
     imgUploadOverlay.classList.remove('hidden');
+    scaleControlValue.value = imagePreviewScale + '%';
+    imgUploadPreview.style.transform = 'scale(' + imagePreviewScale * 0.01 + ')';
     textHashtag.style.borderColor = 'initial';
     uploadFileInput.addEventListener('keydown', onUploadEscPress);
   }
@@ -65,7 +72,7 @@
     window.slider.makeValueOfFilter(window.slider.maxValue);
     imgUploadPreview.style.transform = 'scale(1)';
     document.removeEventListener('keydown', onUploadEscPress);
-    imagePreviewScale = 100;
+    imagePreviewScale = IMAGE_DEFAULT_SCALE;
   }
 
   // отrрытие/закрытие формы загрузки
@@ -86,12 +93,12 @@
   // масштабирование изображения
   function changeScale(evt) {
     if (evt.target === scaleControlSmaller) {
-      if (imagePreviewScale >= 50) {
-        imagePreviewScale -= 25;
+      if (imagePreviewScale >= (IMAGE_SCALE_MIN + IMAGE_SCALE_STEP)) {
+        imagePreviewScale -= IMAGE_SCALE_STEP;
       }
     } else if (evt.target === scaleControlBigger) {
-      if (imagePreviewScale <= 75) {
-        imagePreviewScale += 25;
+      if (imagePreviewScale <= (IMAGE_SCALE_MAX - IMAGE_SCALE_STEP)) {
+        imagePreviewScale += IMAGE_SCALE_STEP;
       }
     }
 
@@ -111,32 +118,32 @@
   function applyEffect(name, value) {
     var valueForEffect = value / window.slider.maxValue;
     var valueForInput = (value / window.slider.maxValue * 100).toFixed(0);
-    if (name === EffectsArray.NONE) {
+    if (name === Effects.NONE) {
       imgUploadPreview.style.filter = 'none';
       imgUploadEffectLevel.classList.add('hidden');
-      effectLevelValue.value = 100;
+      effectLevelValue.value = EFFECT_DEFAULT_VALUE;
     }
-    if (name === EffectsArray.GRYSCALE) {
+    if (name === Effects.GRYSCALE) {
       imgUploadPreview.style.filter = 'grayscale(' + valueForEffect + ')';
       imgUploadEffectLevel.classList.remove('hidden');
       effectLevelValue.value = valueForInput;
     }
-    if (name === EffectsArray.SEPIA) {
+    if (name === Effects.SEPIA) {
       imgUploadPreview.style.filter = 'sepia(' + valueForEffect + ')';
       imgUploadEffectLevel.classList.remove('hidden');
       effectLevelValue.value = valueForInput;
     }
-    if (name === EffectsArray.INVERT) {
+    if (name === Effects.INVERT) {
       imgUploadPreview.style.filter = 'invert(' + valueForEffect * 100 + '%)';
       imgUploadEffectLevel.classList.remove('hidden');
       effectLevelValue.value = valueForInput;
     }
-    if (name === EffectsArray.BLUR) {
+    if (name === Effects.BLUR) {
       imgUploadPreview.style.filter = 'blur(' + valueForEffect * 3 + 'px)';
       imgUploadEffectLevel.classList.remove('hidden');
       effectLevelValue.value = valueForInput;
     }
-    if (name === EffectsArray.BRIGHTNESS) {
+    if (name === Effects.BRIGHTNESS) {
       imgUploadPreview.style.filter = 'brightness(' + (1 + valueForEffect * 2) + ')';
       imgUploadEffectLevel.classList.remove('hidden');
       effectLevelValue.value = valueForInput;
@@ -145,31 +152,31 @@
 
   function convertor(button) {
     if (button === effectNoneButton) {
-      currentEffect = EffectsArray.NONE;
-      return EffectsArray.NONE;
+      currentEffect = Effects.NONE;
+      return Effects.NONE;
     }
     if (button === effectChromeButton) {
-      currentEffect = EffectsArray.GRYSCALE;
-      return EffectsArray.GRYSCALE;
+      currentEffect = Effects.GRYSCALE;
+      return Effects.GRYSCALE;
     }
     if (button === effectSepiaButton) {
-      currentEffect = EffectsArray.SEPIA;
-      return EffectsArray.SEPIA;
+      currentEffect = Effects.SEPIA;
+      return Effects.SEPIA;
     }
     if (button === effectMarvinButton) {
-      currentEffect = EffectsArray.INVERT;
-      return EffectsArray.INVERT;
+      currentEffect = Effects.INVERT;
+      return Effects.INVERT;
     }
     if (button === effectPhobosButton) {
-      currentEffect = EffectsArray.BLUR;
-      return EffectsArray.BLUR;
+      currentEffect = Effects.BLUR;
+      return Effects.BLUR;
     }
     if (button === effectHeatButton) {
-      currentEffect = EffectsArray.BRIGHTNESS;
-      return EffectsArray.BRIGHTNESS;
+      currentEffect = Effects.BRIGHTNESS;
+      return Effects.BRIGHTNESS;
     }
-    currentEffect = EffectsArray.NONE;
-    return EffectsArray.NONE;
+    currentEffect = Effects.NONE;
+    return Effects.NONE;
   }
 
   function applyCurrentEffect(value) {

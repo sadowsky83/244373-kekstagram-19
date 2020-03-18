@@ -2,10 +2,11 @@
 
 (function () {
 
-  var effectLevelPin = document.querySelector('.effect-level__pin');
-  var effectLevelDepth = document.querySelector('.effect-level__depth');
   var COORDINAT_MIN_VALUE = 0;
   var COORDINAT_MAX_VALUE = 450;
+
+  var effectLevelPin = document.querySelector('.effect-level__pin');
+  var effectLevelDepth = document.querySelector('.effect-level__depth');
 
   function makeValueOfFilter(value) {
     effectLevelPin.style.left = value + 'px';
