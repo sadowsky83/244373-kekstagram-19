@@ -68,6 +68,7 @@
     body.classList.remove('modal-open');
     imgUploadOverlay.classList.add('hidden');
     imgUploadForm.reset();
+    textHashtag.setCustomValidity('');
     imgUploadPreview.style.filter = 'none';
     window.slider.makeValueOfFilter(window.slider.maxValue);
     imgUploadPreview.style.transform = 'scale(1)';

@@ -31,10 +31,10 @@
 
   function validatorHashtag(hashtag) {
     var regesp = /^[а-яёa-z0-9]+$/i;
-    if (hashtags[0] === '') {
+    if (hashtag[0] === '') {
       textHashtag.setCustomValidity(CustomMessage.HESHTAGS_LIST_START);
       return false;
-    } else if (hashtags[hashtags.length - 1] === '') {
+    } else if (hashtag[hashtag.length - 1] === '') {
       textHashtag.setCustomValidity(CustomMessage.HESHTAGS_LIST_END);
       return false;
     } else if (hashtag.indexOf('#', HestagData.VALID_POSITION) > 0 || hashtag.length === 0) {
@@ -52,7 +52,7 @@
     } else if (hashtag.length > HestagData.MAX_LENGTH) {
       textHashtag.setCustomValidity(CustomMessage.HESHTAG_MAX_LENGTH + HestagData.MAX_LENGTH + CustomMessage.HESHTAG_VALUE_INCLUSIVE);
       return false;
-    } else if (hashtags.length > HestagData.MAX_COUNT) {
+    } else if (hashtag.length > HestagData.MAX_COUNT) {
       textHashtag.setCustomValidity(CustomMessage.HESHTAG_MAX_NUMBER + HestagData.MAX_COUNT);
     }
     return true;
