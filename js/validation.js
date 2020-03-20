@@ -52,10 +52,9 @@
     var hashtags = [];
     if (textHashtag.value !== '') {
       hashtags = textHashtag.value.toLowerCase().split(' ');
-      for (var i = 0; i < hashtags.length; i++) {
+      for (var i = hashtags.length - 1; i >= 0; i--) {
         if (hashtags[i] === '') {
           hashtags.splice(i, 1);
-          i--;
         }
       }
       for (var j = 0; j < hashtags.length; j++) {
