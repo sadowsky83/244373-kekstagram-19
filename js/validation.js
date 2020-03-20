@@ -28,7 +28,7 @@
   textHashtag.addEventListener('keydown', window.utils.onElementKeyDown);
 
   function validatorHashtag(hashtag) {
-    var regesp = /^[а-яёa-z0-9]+$/i;
+    var regexp = /^[а-яёa-z0-9]+$/i;
     if (hashtag.indexOf('#', HestagData.VALID_POSITION) > 0) {
       textHashtag.setCustomValidity(CustomMessage.HESHTAG_SEPARATOR);
       return false;
@@ -38,7 +38,7 @@
     } else if (hashtag.length < 2) {
       textHashtag.setCustomValidity(CustomMessage.HESHTAG_MIN_LENGTH);
       return false;
-    } else if (!regesp.test(hashtag.substr(1))) {
+    } else if (!regexp.test(hashtag.substr(1))) {
       textHashtag.setCustomValidity(CustomMessage.HASHTAG_CONTENT);
       return false;
     } else if (hashtag.length > HestagData.MAX_LENGTH) {
