@@ -14,8 +14,6 @@
   };
 
   var CustomMessage = {
-    HESHTAGS_LIST_START: 'Список хэш-тэгов не может начинаться пробелом',
-    HESHTAGS_LIST_END: 'Список хэш-тэгов не может оканчиваться пробелом',
     HESHTAG_SEPARATOR: 'Хэш-теги разделяются одним пробелом',
     HESHTAG_START: 'Хэш-тег должен начинаеться с символа #',
     HESHTAG_MIN_LENGTH: 'Хеш-тег не может состоять только из одной решётки',
@@ -31,13 +29,7 @@
 
   function validatorHashtag(hashtag) {
     var regesp = /^[а-яёa-z0-9]+$/i;
-    if (hashtag[0] === '') {
-      textHashtag.setCustomValidity(CustomMessage.HESHTAGS_LIST_START);
-      return false;
-    } else if (hashtag[hashtag.length - 1] === '') {
-      textHashtag.setCustomValidity(CustomMessage.HESHTAGS_LIST_END);
-      return false;
-    } else if (hashtag.indexOf('#', HestagData.VALID_POSITION) > 0) {
+    if (hashtag.indexOf('#', HestagData.VALID_POSITION) > 0) {
       textHashtag.setCustomValidity(CustomMessage.HESHTAG_SEPARATOR);
       return false;
     } else if (hashtag[0] !== '#') {
@@ -60,10 +52,9 @@
     var hashtags = [];
     if (textHashtag.value !== '') {
       hashtags = textHashtag.value.toLowerCase().split(' ');
-      for (var i = 0; i < hashtags.length; i++) {
+      for (var i = hashtags.length - 1; i > 0; i--) {
         if (hashtags[i] === '') {
           hashtags.splice(i, 1);
-          i--;
         }
       }
       for (var j = 0; j < hashtags.length; j++) {
