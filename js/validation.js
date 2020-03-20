@@ -4,7 +4,7 @@
 
   var textHashtag = document.querySelector('.text__hashtags');
   var uploadSubmit = document.querySelector('#upload-submit');
-  var hashtags = [];
+
 
   var HestagData = {
     MAX_COUNT: 5,
@@ -37,7 +37,7 @@
     } else if (hashtag[hashtag.length - 1] === '') {
       textHashtag.setCustomValidity(CustomMessage.HESHTAGS_LIST_END);
       return false;
-    } else if (hashtag.indexOf('#', HestagData.VALID_POSITION) > 0 || hashtag.length === 0) {
+    } else if (hashtag.indexOf('#', HestagData.VALID_POSITION) > 0) {
       textHashtag.setCustomValidity(CustomMessage.HESHTAG_SEPARATOR);
       return false;
     } else if (hashtag[0] !== '#') {
@@ -52,24 +52,33 @@
     } else if (hashtag.length > HestagData.MAX_LENGTH) {
       textHashtag.setCustomValidity(CustomMessage.HESHTAG_MAX_LENGTH + HestagData.MAX_LENGTH + CustomMessage.HESHTAG_VALUE_INCLUSIVE);
       return false;
-    } else if (hashtag.length > HestagData.MAX_COUNT) {
-      textHashtag.setCustomValidity(CustomMessage.HESHTAG_MAX_NUMBER + HestagData.MAX_COUNT);
     }
     return true;
   }
 
   function hashtagsArrayCreate() {
+    var hashtags = [];
     if (textHashtag.value !== '') {
       hashtags = textHashtag.value.toLowerCase().split(' ');
       for (var i = 0; i < hashtags.length; i++) {
-        var isHashtagValid = validatorHashtag(hashtags[i]);
+        if (hashtags[i] === '') {
+          hashtags.splice(i, 1);
+          i--;
+        }
+      }
+      for (var j = 0; j < hashtags.length; j++) {
+        var isHashtagValid = validatorHashtag(hashtags[j]);
         if (!isHashtagValid) {
           textHashtag.style.borderColor = 'red';
           break;
         }
-        var positionNextHashtag = i + 1;
-        if (hashtags.indexOf(hashtags[i], positionNextHashtag) > 0) {
-          textHashtag.setCustomValidity('Один и тот же хэш-тег не может быть использован дважды');
+        var positionNextHashtag = j + 1;
+        if (hashtags.indexOf(hashtags[j], positionNextHashtag) > 0) {
+          textHashtag.setCustomValidity(CustomMessage.HESHTAG_NO_REPEAT);
+          break;
+        }
+        if (hashtags.length > HestagData.MAX_COUNT) {
+          textHashtag.setCustomValidity(CustomMessage.HESHTAG_MAX_NUMBER + HestagData.MAX_COUNT);
           break;
         }
       }
