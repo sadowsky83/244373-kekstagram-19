@@ -14,12 +14,12 @@
   };
 
   var CustomMessage = {
-    HESHTAG_SEPARATOR: 'Хэш-теги разделяются одним пробелом',
+    HESHTAG_SEPARATOR: 'Хэш-теги разделяются пробелами',
     HESHTAG_START: 'Хэш-тег должен начинаеться с символа #',
     HESHTAG_MIN_LENGTH: 'Хеш-тег не может состоять только из одной решётки',
     HASHTAG_CONTENT: 'Хэш-тэг должен состоять из букв и чисел',
     HESHTAG_MAX_LENGTH: 'Максимальная длина одного хэш-тега ',
-    HESHTAG_VALUE_INCLUSIVE: ' имволов, включая решётку',
+    HESHTAG_VALUE_INCLUSIVE: ' cимволов, включая решётку',
     HESHTAG_NO_REPEAT: 'Один и тот же хэш-тег не может быть использован дважды',
     HESHTAG_MAX_NUMBER: 'Хэштегов может быть максимум '
   };
@@ -52,9 +52,10 @@
     var hashtags = [];
     if (textHashtag.value !== '') {
       hashtags = textHashtag.value.toLowerCase().split(' ');
-      for (var i = hashtags.length - 1; i > 0; i--) {
+      for (var i = 0; i < hashtags.length; i++) {
         if (hashtags[i] === '') {
           hashtags.splice(i, 1);
+          i--;
         }
       }
       for (var j = 0; j < hashtags.length; j++) {
